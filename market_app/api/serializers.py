@@ -57,12 +57,12 @@ class SellerCreateSerializer(serializers.Serializer):
 
         def validate_markets(self, value):
                markets = Market.objects.filter(id__in=value) # wir holen uns alle markets mit der id
-               if(markets) != len(value): # wir prüfen ob alles 
+               if len(markets) != len(value): # wir prüfen ob alles 
                        raise serializers.ValidationError("One or more Makrts not found")
                return value
 
         def create (self, validated_data):
-                market_ids= self.validate_data.pop('markets')
+                market_ids= validated_data.pop('markets')
                 seller = Seller.objects.create(**validated_data)
                 markets = Market.objects.filter(id__in=market_ids)
                 seller.markets.set(markets)
