@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from market_app.models import Market
+from market_app.models import Market, Seller
 
 
 # aus der class ausgelagert, über validators=[valida_no_x] wird es dann aufgerufen 
@@ -46,3 +46,24 @@ class SellerDetailSerializer(serializers.Serializer):
         # innerhalb eines anderen Serializers.
         # Genau das bezeichnet man als Nested Serializer.
         markets = MarketSerializer(many=True, read_only=True)
+
+class SellerCreateSerializer(serializers.Serializer):
+        name = serializers.CharField(max_length=255)
+        contact_info = serializers.CharField()
+
+        # hier erben wir das Listfield vom Serializer, wir wollen nur createn deshalb write_only= True
+        # hier mit heben wir die Primarykeys von market mit child=serializers.IntegerField()
+        markets = serializers.ListField(child=serializers.IntegerField(), write_only=True )
+
+        def validate_markets(self, value):
+               markets = Market.objects.filter(id__in=value) # wir holen uns alle markets mit der id
+               if(markets) != len(value): # wir prüfen ob alles 
+                       raise serializers.ValidationError("One or more Makrts not found")
+               return value
+
+        def create (self, validated_data):
+                market_ids= self.validate_data.pop('markets')
+                seller = Seller.objects.create(**validated_data)
+                markets = Market.objects.filter(id__in=market_ids)
+                seller.markets.set(markets)
+                return seller
