@@ -38,4 +38,11 @@ class MarketSerializer(serializers.Serializer):
 
 
 class SellerDetailSerializer(serializers.Serializer):
-        pass
+        id = serializers.IntegerField(read_only=True)
+        name = serializers.CharField(max_length=255)
+        contact_info = serializers.CharField()
+
+        # Hier verwenden wir einen bereits vorhandenen Serializer
+        # innerhalb eines anderen Serializers.
+        # Genau das bezeichnet man als Nested Serializer.
+        markets = MarketSerializer(many=True, read_only=True)
