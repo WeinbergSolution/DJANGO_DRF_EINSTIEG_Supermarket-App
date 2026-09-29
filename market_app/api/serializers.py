@@ -45,7 +45,12 @@ class SellerDetailSerializer(serializers.Serializer):
         # Hier verwenden wir einen bereits vorhandenen Serializer
         # innerhalb eines anderen Serializers.
         # Genau das bezeichnet man als Nested Serializer.
-        markets = MarketSerializer(many=True, read_only=True)
+
+        # markets = MarketSerializer(many=True, read_only=True)
+
+
+        # ändert die ansicht in der Api view, wie markets id's zugrodnet werden. 
+        makets = serializers.StringRelatedField(many=True)
 
 class SellerCreateSerializer(serializers.Serializer):
         name = serializers.CharField(max_length=255)
