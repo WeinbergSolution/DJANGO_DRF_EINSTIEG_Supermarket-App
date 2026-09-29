@@ -25,6 +25,20 @@ def markets_view(request):
 
 
 
+@api_view(['GET', 'DELETE']) # dekorater
+def market_single_view(request, pk):
 
+
+    if request.method == 'GET':
+        market = Market.objects.get(pk=pk)
+        serializer = MarketSerializer(market)
+        return Response(serializer.data)
+
+    if request.method == 'DELETE':
+            market = Market.objects.get(pk=pk)
+            serializer = MarketSerializer(market)
+            market.delete()
+            return Response(serializer.data)
+    
 
        
