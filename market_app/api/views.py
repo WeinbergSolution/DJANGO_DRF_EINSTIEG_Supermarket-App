@@ -22,10 +22,11 @@ def markets_view(request):
             return Response(serializer.data)
           else:
               return Response(serializer.errors)
+  
 
 
 
-@api_view(['GET', 'DELETE']) # dekorater
+@api_view(['GET', 'DELETE', 'PUT']) # dekorater
 def market_single_view(request, pk):
 
 
@@ -39,6 +40,17 @@ def market_single_view(request, pk):
             serializer = MarketSerializer(market)
             market.delete()
             return Response(serializer.data)
+
+    if request.method == 'PUT':
+            market = Market.objects.get(pk=pk)
+            serializer = MarketSerializer(market, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors)
+
     
 
        
