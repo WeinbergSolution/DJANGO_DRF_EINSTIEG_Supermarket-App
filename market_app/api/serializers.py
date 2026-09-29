@@ -3,38 +3,64 @@ from market_app.models import Market, Seller, Product
 
 
 # aus der class ausgelagert, über validators=[valida_no_x] wird es dann aufgerufen 
-def valida_no_x(value):
-          errors = []
+# def validate_no_x(value):
+#           errors = []
 
-          if 'X' in value:
-                 errors.append('no X in location')
-          if 'Y' in value:
-                           errors.append('no Y in location')
+#           if 'X' in value:
+#                  errors.append('no X in location')
+#           if 'Y' in value:
+#                            errors.append('no Y in location')
 
-          if errors:
-                  raise serializers.ValidationError(errors)
+#           if errors:
+#                   raise serializers.ValidationError(errors)
           
-          return value
+#           return value
         
 
+# Umgebaut zum Model Serializer
+class MarketSerializer(serializers.ModelSerializer):
 
-class MarketSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=255)
-    location = serializers.CharField(max_length=255, validators=[valida_no_x])
-    description = serializers.CharField()
-    net_worth = serializers.DecimalField(max_digits=100, decimal_places=2)
 
-    def create(self, validated_data):
-              return Market.objects.create(**validated_data)
+# Auskommentiert wird mit ModelSerilizer einfacher gelöst     
 
-    def update(self, instance, validated_data):
-         instance.name = validated_data.get('name', instance.name)
-         instance.location = validated_data.get('location', instance.location)
-         instance.description = validated_data.get('description', instance.description)
-         instance.net_worth = validated_data.get('net_worth', instance.net_worth)
-         instance.save()
-         return instance
+#     id = serializers.IntegerField(read_only=True)
+#     name = serializers.CharField(max_length=255)
+#     location = serializers.CharField(max_length=255) # validators=[validate_no_x]
+#     description = serializers.CharField()
+#     net_worth = serializers.DecimalField(max_digits=100, decimal_places=2)
+
+#     def create(self, validated_data):
+#               return Market.objects.create(**validated_data)
+
+#     def update(self, instance, validated_data):
+#          instance.name = validated_data.get('name', instance.name)
+#          instance.location = validated_data.get('location', instance.location)
+#          instance.description = validated_data.get('description', instance.description)
+#          instance.net_worth = validated_data.get('net_worth', instance.net_worth)
+#          instance.save()
+#          return instance
+
+    class Meta:
+        model = Market
+        fields = '__all__'
+
+        # validation benötigt die Field bezeichnung im NAmen 
+    def validate_name(self, value):
+                errors = []
+
+                if 'X' in value:
+                        errors.append('no X in name')
+                if 'Y' in value:
+                        errors.append('no Y in name')
+
+                if errors:
+                        raise serializers.ValidationError(errors)
+          
+                return value
+
+  
+
+
 
 
 class SellerDetailSerializer(serializers.Serializer):
