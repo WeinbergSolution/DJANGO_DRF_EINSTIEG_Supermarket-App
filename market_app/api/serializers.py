@@ -36,5 +36,6 @@ class MarketSerializer(serializers.Serializer):
          instance.save()
          return instance
 
-    
-              
+
+class SellerDetailSerializer(serializers.Serializer):
+        pass
