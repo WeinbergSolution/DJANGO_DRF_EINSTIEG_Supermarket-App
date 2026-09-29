@@ -42,7 +42,15 @@ class MarketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Market
-        fields = '__all__'
+
+         # 1. zwei varianten von fields und der Anzeige um alles anzeigen
+        #fields = '__all__'
+        exclude = []
+        
+        # 2. varianten um nur ein Teil an zu zeigen 
+        # fields = ['id', 'name', 'location', 'description']
+        # exclude = ['name']
+       
 
         # validation benötigt die Field bezeichnung im NAmen 
     def validate_name(self, value):
