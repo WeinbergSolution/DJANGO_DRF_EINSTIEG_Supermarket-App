@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import MarketSerializer, SellerDetailSerializer, SellerCreateSerializer
-from market_app.models import Market, Seller
+from .serializers import MarketSerializer, SellerDetailSerializer, SellerCreateSerializer, ProductSerializer
+from market_app.models import Market, Seller, Product
 
 
 
@@ -72,6 +72,52 @@ def sellers_view(request):
               return Response(serializer.errors)
   
 
-    
+
+# Example 16 
+
+@api_view(['GET', 'POST']) # dekorater
+def product_view(request):
+
+
+    if request.method == 'GET':
+        product = Product.objects.all()
+        serializer = ProductSerializer(product, many=True)
+        return Response(serializer.data)
+
+
+    if request.method == 'POST':
+          serializer = ProductSerializer(data=request.data)
+          if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+          else:
+              return Response(serializer.errors)
+
+@api_view(['GET', 'DELETE', 'PUT']) # dekorater
+def prduct_single_view(request, pk):
+
+
+    if request.method == 'GET':
+        market = Product.objects.get(pk=pk)
+        serializer = ProductSerializer(market)
+        return Response(serializer.data)
+
+    if request.method == 'DELETE':
+            market = Product.objects.get(pk=pk)
+            serializer = ProductSerializer(market)
+            market.delete()
+            return Response(serializer.data)
+
+    if request.method == 'PUT':
+            market = Product.objects.get(pk=pk)
+            serializer = ProductSerializer(market, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors)
+ 
+  
 
        

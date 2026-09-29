@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from market_app.models import Market, Seller
+from market_app.models import Market, Seller, Product
 
 
 # aus der class ausgelagert, über validators=[valida_no_x] wird es dann aufgerufen 
@@ -72,3 +72,33 @@ class SellerCreateSerializer(serializers.Serializer):
                 markets = Market.objects.filter(id__in=market_ids)
                 seller.markets.set(markets)
                 return seller
+
+
+
+class ProductSerializer(serializers.Serializer):
+
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=255)
+    description = serializers.CharField()
+    price = serializers.DecimalField(max_digits=50, decimal_places=2)
+
+    # Foreign Keys mit PrimaryKeyRelatedField ersetzen
+    market = serializers.PrimaryKeyRelatedField(
+        queryset=Market.objects.all()
+    )
+
+    seller = serializers.PrimaryKeyRelatedField(
+        queryset=Seller.objects.all()
+    )
+
+    def create(self, validated_data):
+              return Product.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+         instance.name = validated_data.get('name', instance.name)
+         instance.description = validated_data.get('description', instance.description)
+         instance.price = validated_data.get('price', instance.price)
+         instance.market = validated_data.get('market', instance.market)
+         instance.seller = validated_data.get('seller', instance.seller)
+         instance.save()
+         return instance
