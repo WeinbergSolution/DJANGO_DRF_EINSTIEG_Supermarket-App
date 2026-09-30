@@ -79,11 +79,19 @@ class SellerSerializer(serializers.ModelSerializer):
                write_only=True,
                source='markets'
         )
+
+        market_count = serializers.SerializerMethodField()
+
+
         class Meta:
                 model = Seller
                 exclude = []
 
-  
+        # obj = ist das was wir Serialisieren oder deserialisieren 
+        # dadurch bekommen wir ein market_count bei der GET abfrage mit ausgegeben z.b. "market_count": 1,
+        def get_market_count(self, obj):
+               return obj.markets.count()
+               
 
 
 # wurde durch Nested SellerSeriializer ersetzt 
