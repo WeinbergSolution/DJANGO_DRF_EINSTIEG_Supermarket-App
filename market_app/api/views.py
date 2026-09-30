@@ -70,6 +70,36 @@ def sellers_view(request):
             return Response(serializer.data)
           else:
               return Response(serializer.errors)
+
+
+
+@api_view(['GET', 'DELETE', 'PUT']) # dekorater
+def seller_single_view(request, pk):
+
+
+    if request.method == 'GET':
+        seller = Seller.objects.get(pk=pk)
+        serializer = SellerSerializer(seller)
+        return Response(serializer.data)
+
+    if request.method == 'DELETE':
+            seller = Seller.objects.get(pk=pk)
+            serializer = SellerSerializer(seller)
+            seller.delete()
+            return Response(serializer.data)
+
+    if request.method == 'PUT':
+            seller = Seller.objects.get(pk=pk)
+            serializer = SellerSerializer(seller, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors)
+ 
+  
+
   
 
 
@@ -98,19 +128,19 @@ def prduct_single_view(request, pk):
 
 
     if request.method == 'GET':
-        market = Product.objects.get(pk=pk)
-        serializer = ProductSerializer(market)
+        prduct = Product.objects.get(pk=pk)
+        serializer = ProductSerializer(prduct)
         return Response(serializer.data)
 
     if request.method == 'DELETE':
-            market = Product.objects.get(pk=pk)
-            serializer = ProductSerializer(market)
-            market.delete()
+            prduct = Product.objects.get(pk=pk)
+            serializer = ProductSerializer(prduct)
+            prduct.delete()
             return Response(serializer.data)
 
     if request.method == 'PUT':
-            market = Product.objects.get(pk=pk)
-            serializer = ProductSerializer(market, data=request.data, partial=True)
+            prduct = Product.objects.get(pk=pk)
+            serializer = ProductSerializer(prduct, data=request.data, partial=True)
 
             if serializer.is_valid():
                 serializer.save()
