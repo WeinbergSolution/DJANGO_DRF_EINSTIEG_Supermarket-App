@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import MarketSerializer, SellerDetailSerializer, SellerCreateSerializer, ProductSerializer
+from .serializers import MarketSerializer, SellerDetailSerializer, SellerCreateSerializer, ProductSerializer, SellerSerializer
 from market_app.models import Market, Seller, Product
 
 
@@ -59,12 +59,12 @@ def sellers_view(request):
 
     if request.method == 'GET':
         sellers = Seller.objects.all()
-        serializer = SellerDetailSerializer(sellers, many=True)
+        serializer = SellerSerializer(sellers, many=True)
         return Response(serializer.data)
 
 
     if request.method == 'POST':
-          serializer = SellerCreateSerializer(data=request.data)
+          serializer = SellerSerializer(data=request.data)
           if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

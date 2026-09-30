@@ -66,10 +66,27 @@ class MarketSerializer(serializers.ModelSerializer):
           
                 return value
 
+
+# nested ModelSerializer
+        # GET und POST zusammen 
+
+class SellerSerializer(serializers.ModelSerializer):
+
+        markets = MarketSerializer(many=True, read_only=True)
+        market_ids = serializers.PrimaryKeyRelatedField(
+               queryset=Market.objects.all(),
+               many=True,
+               write_only=True,
+               source='markets'
+        )
+        class Meta:
+                model = Seller
+                exclude = []
+
   
 
 
-
+# wurde durch Nested SellerSeriializer ersetzt 
 
 class SellerDetailSerializer(serializers.Serializer):
         id = serializers.IntegerField(read_only=True)
@@ -86,6 +103,9 @@ class SellerDetailSerializer(serializers.Serializer):
         # ändert die ansicht in der Api view, wie markets id's zugrodnet werden. 
         makets = serializers.StringRelatedField(many=True)
 
+
+
+# wurde durch Nested SellerSeriializer ersetzt 
 class SellerCreateSerializer(serializers.Serializer):
         name = serializers.CharField(max_length=255)
         contact_info = serializers.CharField()
