@@ -20,6 +20,11 @@ from market_app.models import Market, Seller, Product
 # Umgebaut zum Model Serializer
 class MarketSerializer(serializers.ModelSerializer):
 
+        # gibt uns den seller namen mit aus 
+#    sellers = serializers.StringRelatedField(many=True, read_only=True)
+        # HyberLinkedRelatedField
+    sellers = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='seller_single')
+
 
 # Auskommentiert wird mit ModelSerilizer einfacher gelöst     
 

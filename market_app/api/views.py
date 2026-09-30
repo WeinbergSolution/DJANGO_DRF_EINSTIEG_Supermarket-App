@@ -79,7 +79,7 @@ def seller_single_view(request, pk):
 
     if request.method == 'GET':
         seller = Seller.objects.get(pk=pk)
-        serializer = SellerSerializer(seller)
+        serializer = SellerSerializer(seller, context={'request': request})
         return Response(serializer.data)
 
     if request.method == 'DELETE':
