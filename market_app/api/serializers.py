@@ -76,11 +76,33 @@ class MarketSerializer(serializers.ModelSerializer):
 
         # Erbt alles von Marketserializer und Hyperserializer
         # muss im GET in der View verwendet werden MarketHyperlinnkedSerializer
-class MarketHyperlinkedSerializer(MarketSerializer, serializers.HyperlinkedModelSerializer):
-        sellers = None  # lässt sellers aus der view raus beim GET 
-        class Meta:
-            model = Market
-            exclude = []
+class MarketHyperlinkedSerializer(
+    MarketSerializer,
+    serializers.HyperlinkedModelSerializer
+):
+
+    def __init__(self, *args, **kwargs):
+
+        # Übergebene fields aus den kwargs holen.
+        fields = kwargs.pop('fields', None)
+
+        super().__init__(*args, **kwargs)
+
+        # Wenn fields übergeben wurden, werden alle
+        # anderen Felder aus dem Serializer entfernt.
+        if fields is not None:
+            allowed = set(fields)
+            existing = set(self.fields)
+
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+    sellers = None
+
+    class Meta:
+        model = Market
+        exclude = ['id', 'url', 'name', 'location', 'description', 'net_worth']
+
 
     
 
