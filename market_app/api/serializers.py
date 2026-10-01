@@ -72,6 +72,21 @@ class MarketSerializer(serializers.ModelSerializer):
                 return value
 
 
+
+
+        # Erbt alles von Marketserializer und Hyperserializer
+        # muss im GET in der View verwendet werden MarketHyperlinnkedSerializer
+class MarketHyperlinkedSerializer(MarketSerializer, serializers.HyperlinkedModelSerializer):
+        sellers = None  # lässt sellers aus der view raus beim GET 
+        class Meta:
+            model = Market
+            exclude = []
+
+    
+
+
+
+
 # nested ModelSerializer
         # GET und POST zusammen 
 
