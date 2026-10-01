@@ -206,3 +206,11 @@ class ProductSerializer(serializers.Serializer):
          instance.seller = validated_data.get('seller', instance.seller)
          instance.save()
          return instance
+
+
+
+class ProductModelSerializer(serializers.ModelSerializer):
+
+       class Meta:
+               model = Product
+               exclude = []

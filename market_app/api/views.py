@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import MarketSerializer, SellerDetailSerializer, SellerCreateSerializer, ProductSerializer, SellerSerializer
+from .serializers import MarketSerializer, ProductSerializer, SellerSerializer, ProductModelSerializer
 from market_app.models import Market, Seller, Product
 
 
@@ -111,12 +111,12 @@ def product_view(request):
 
     if request.method == 'GET':
         product = Product.objects.all()
-        serializer = ProductSerializer(product, many=True)
+        serializer = ProductModelSerializer(product, many=True)
         return Response(serializer.data)
 
 
     if request.method == 'POST':
-          serializer = ProductSerializer(data=request.data)
+          serializer = ProductModelSerializer(data=request.data)
           if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -124,23 +124,23 @@ def product_view(request):
               return Response(serializer.errors)
 
 @api_view(['GET', 'DELETE', 'PUT']) # dekorater
-def prduct_single_view(request, pk):
+def product_single_view(request, pk):
 
 
     if request.method == 'GET':
-        prduct = Product.objects.get(pk=pk)
-        serializer = ProductSerializer(prduct)
+        product = Product.objects.get(pk=pk)
+        serializer = ProductModelSerializer(product)
         return Response(serializer.data)
 
     if request.method == 'DELETE':
-            prduct = Product.objects.get(pk=pk)
-            serializer = ProductSerializer(prduct)
-            prduct.delete()
+            product = Product.objects.get(pk=pk)
+            serializer = ProductModelSerializer(product)
+            product.delete()
             return Response(serializer.data)
 
     if request.method == 'PUT':
-            prduct = Product.objects.get(pk=pk)
-            serializer = ProductSerializer(prduct, data=request.data, partial=True)
+            product = Product.objects.get(pk=pk)
+            serializer = ProductModelSerializer(product, data=request.data, partial=True)
 
             if serializer.is_valid():
                 serializer.save()
