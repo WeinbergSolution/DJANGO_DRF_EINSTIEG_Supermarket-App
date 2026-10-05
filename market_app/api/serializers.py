@@ -133,7 +133,7 @@ class SellerSerializer(serializers.ModelSerializer):
         # dadurch bekommen wir ein market_count bei der GET abfrage mit ausgegeben z.b. "market_count": 1,
         def get_market_count(self, obj):
                return obj.markets.count()
-               
+              
 
 
 # wurde durch Nested SellerSeriializer ersetzt 
@@ -178,6 +178,11 @@ class SellerCreateSerializer(serializers.Serializer):
                 return seller
 
 
+
+class ProductModelSerializer(serializers.ModelSerializer):
+        class Meta:
+                       model = Product
+                       fields = '__all__'
 
 class ProductSerializer(serializers.Serializer):
 
