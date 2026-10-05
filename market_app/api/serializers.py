@@ -213,9 +213,3 @@ class ProductSerializer(serializers.Serializer):
          return instance
 
 
-
-class ProductModelSerializer(serializers.ModelSerializer):
-
-       class Meta:
-               model = Product
-               exclude = []

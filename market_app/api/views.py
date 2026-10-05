@@ -6,11 +6,28 @@ from rest_framework.views import APIView
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import status
+from django.shortcuts import get_object_or_404
+from rest_framework import viewsets
 
 
 
-class ProductViewSet():
-     pass
+class ProductViewSet(viewsets.ViewSet):
+
+     queryset = Product.objects.all()
+     
+     def list(self, request):
+        serializer = ProductModelSerializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+     def retrieve(self, request, pk=None):
+        
+        product = get_object_or_404(self.queryset, pk=pk)
+        serializer = ProductModelSerializer(product)
+        return Response(serializer.data)
+
+
+
+
 
 # CLass Based views # GenericAPIView
 #ListAPIView ist selbst eine Generic View und baut auf GenericAPIView plus dem passenden List-Verhalten auf.
