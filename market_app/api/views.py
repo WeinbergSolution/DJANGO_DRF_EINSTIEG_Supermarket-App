@@ -11,7 +11,17 @@ from rest_framework import viewsets
 
 
 
-class ProductViewSet(viewsets.ViewSet):
+
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+     queryset = Product.objects.all()
+     serializer_class = ProductModelSerializer
+
+     
+
+
+class ProductViewSetOld(viewsets.ViewSet):
 
      queryset = Product.objects.all()
      
